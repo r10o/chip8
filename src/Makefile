@@ -2,7 +2,7 @@ TARGET	=	chip8
 SOURCES	=	$(wildcard *.c)
 HEADERS	=	$(wildcard *.h)
 
-CFLAGS	=	-Wall -Werror -g -lSDL
+CFLAGS	=	-Wall -g -lSDL -std=c99
 
 BINDIR	=	"../bin"
 LOGDIR	=	"../logs"

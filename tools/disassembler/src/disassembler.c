@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -21,7 +20,7 @@ void opDis(uint8_t *file_buffer, int current_pc)
 		case 0x3: printf("%-10s V%01x, #%02x", "SE", first_byte & 0xf, second_byte); break;
 		case 0x4: printf("%-10s V%01x, #%02x", "SNE", first_byte & 0xf, second_byte); break;
 		case 0x5: printf("%-10s V%01x, V%01x", "SE", first_byte & 0xf, second_byte >> 4); break;
-		case 0x6: printf("%-10s V%01x, #%02x", "SE", first_byte & 0xf, second_byte); break;
+		case 0x6: printf("%-10s V%01x, #%02x", "LD", first_byte & 0xf, second_byte); break;
 		case 0x7: printf("%-10s V%01x, #%02x", "ADD", first_byte & 0xf, second_byte); break;
 		case 0x8:
 			  switch(second_byte & 0xf) {
@@ -31,9 +30,9 @@ void opDis(uint8_t *file_buffer, int current_pc)
 				  case 0x3: printf("%-10s V%01x, V%01x", "XOR", first_byte & 0xf, second_byte >> 4); break;
 				  case 0x4: printf("%-10s V%01x, V%01x", "ADD", first_byte & 0xf, second_byte >> 4); break;
 				  case 0x5: printf("%-10s V%01x, V%01x", "SUB", first_byte & 0xf, second_byte >> 4); break;
-				  case 0x6: printf("%-10s V%01x, V%01x", "SHR", first_byte & 0xf, second_byte >> 4); break;
+				  case 0x6: printf("%-10s V%01x, {,V%01x}", "SHR", first_byte & 0xf, second_byte >> 4); break;
 				  case 0x7: printf("%-10s V%01x, V%01x", "SUBN", first_byte & 0xf, second_byte >> 4); break;
-				  case 0xe: printf("%-10s V%01x, V%01x", "SHL", first_byte & 0xf, second_byte >> 4); break;
+				  case 0xe: printf("%-10s V%01x, {,V%01x}", "SHL", first_byte & 0xf, second_byte >> 4); break;
 				  default: printf("UNKNOWN 8");
 			  }
 			  break;
@@ -52,6 +51,14 @@ void opDis(uint8_t *file_buffer, int current_pc)
 		case 0xf:
 			  switch(second_byte) {
 				  case 0x07: printf("%-10s V%01x, DELAY", "LD", first_byte & 0xf); break;
+				  case 0x0a: printf("%-10s V%01x, Key", "LD", first_byte & 0xf); break;
+				  case 0x15: printf("%-10s DELAY, V%01x", "LD", first_byte & 0xf); break;
+				  case 0x18: printf("%-10s SOUND, V%01x", "LD", first_byte & 0xf); break;
+				  case 0x1e: printf("%-10s I, V%01x", "ADD", first_byte & 0xf); break;
+				  case 0x29: printf("%-10s I, V%01x", "LD", first_byte & 0xf); break;
+				  case 0x33: printf("%-10s [I], V%01x", "LD", first_byte & 0xf); break;
+				  case 0x55: printf("%-10s [I], V%01x", "LD", first_byte & 0xf); break;
+				  case 0x65: printf("%-10s V%01x, [I]", "LD", first_byte & 0xf); break;
 				  default: printf("UNKNOWN F"); break;
 			  }
 	}
