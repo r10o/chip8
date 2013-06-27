@@ -1,8 +1,8 @@
-#pragma once
 #ifndef CPU_H
 #define CPU_H
 #include <stdint.h>
-#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 struct chip8_cpu {
 	/* Registers */
@@ -15,18 +15,12 @@ struct chip8_cpu {
 	uint16_t stack[16];
 };
 
-struct chip8_gfx {
-	bool draw;
-	uint8_t screen[4][8];
-};
-
-struct chip8_gfx gfx;
 struct chip8_cpu cpu;
 
 /* Initializes the values of the registers and the timers */
 void init_cpu();
-void init_gfx();
-void emulate_cycle(uint16_t opcode);
+void execute_opcode(uint16_t opcode);
+void emulate_cycle();
 
 /* For internal use only */
 void cls_0();

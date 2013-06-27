@@ -1,22 +1,28 @@
-TARGET	=	disassembler
-SOURCES	=	$(TARGET).c
+CC	= gcc
+BIN	= disassembler
+SRC	= $(wildcard *.c)
+HDR	= $(wildcard *.h)
+OBJ	= $(SRC:.c=.o)
 
-CFLAGS	=	-Wall -Werror -g
+CFLAGS	= -Wall -Wextra -g -pedantic -std=c99 
+LFLAGS	= `sdl-config --libs` -lSDL
 
-BINDIR	=	"../bin"
-LOGDIR	=	"../logs"
+all: options $(BIN)
 
-all: setup $(TARGET)
+options:
+	@echo $(BIN) build options:
+	@echo "CC	= $(CC)"
+	@echo "CFLAGS	= $(CFLAGS)"
+	@echo "LFLAGS	= $(LFLAGS)"
 
-setup:
-	@mkdir -p $(BINDIR)
-	@mkdir -p $(LOGDIR)
+.c.o:
+	@echo CC -c $<
+	@$(CC) $(CFLAGS) -c $<
 
-$(TARGET):
-	@echo "Compiling..."
-	@gcc $(CFLAGS) -o $(BINDIR)/$(TARGET) $(SOURCES) 2> $(LOGDIR)/$(TARGET).log
+$(BIN): $(OBJ)
+	@echo CC -o $@
+	@$(CC) $(OBJ) -o $(BIN) $(LFLAGS)
 
 clean:
-	@echo "Cleaning..."
-	@rm -f "$(BINDIR)/$(TARGET)"
-	@rm -f "$(LOGDIR)/$(TARGET).log"
+	@echo Cleaning.
+	@rm -rf *.o $(BIN)

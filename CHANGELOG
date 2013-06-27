@@ -1,0 +1,16 @@
+-> 0.0.1
+2013-06-26
+
+general
+	[*] First version, pre-alpha
+	[*] Completely changed the structure of the source code
+	[*] Implemented main loop with 60 FPS max 
+	[*] Began implementation of SDL
+cpu
+	[*] Almost completed opcode execution
+	[*] Centralized cpu in structure
+gfx
+	[*] Seperated graphics and cpu
+	[*] Completed graphic management
+input
+	[*] Began input management

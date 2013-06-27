@@ -1,0 +1,15 @@
+TODO
+
+# URGENT
+: Finish the execution of optcodes
+: Implement a way to store screen information for drawing
+: Find a way to manage input (current way is too complicated)
+
+# NOT URGENT
+: Clean up structure of code
+
+# OPTIONAL
+: Extend gui
+: Implement Super Chip8 features
+: Experiment with other game loop structures for better performance
+: Debugger

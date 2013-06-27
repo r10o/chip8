@@ -1,40 +1,51 @@
 #include "cpu.h"
+#include "gfx.h"
 #include "mem.h"
 #include "input.h"
-#include <stdio.h>
-#include <stdlib.h>
 
-void init_cpu()
+extern void init_gfx(char *title);
+extern void draw();
+extern void cleanup();
+
+void init_cpu(char *file_name)
 {
-	for (int j = 0; j < 0xf; j++) {
+	for (int j = 0; j < 16; j++) {
 		cpu.v[j] = 0;
 		cpu.stack[j] = 0;
 	}
 	cpu.i = 0;
 	cpu.dt = 0;
 	cpu.st = 0;
-	cpu.pc = 0;
+	cpu.pc = 0x200;
 	cpu.sp = 0;
+	init_mem(file_name);
+	init_gfx("Chip8 Emulator");
 }
 
-void init_gfx() 
+void emulate_cycle()
 {
-	gfx.draw = false;
-	for (int j = 0; j < 32; j++) {
-		for (int k = 0; k < 64; k++) {
-			gfx.screen[j][k] = 0;
-		}
-	}
+	get_input();
+	if (cpu.dt > 0) { --cpu.dt; }
+	if (cpu.dt > 0) { --cpu.st; }
+	execute_opcode((mem[cpu.pc] << 4) & mem[cpu.pc + 1]);
+	cpu.pc += 2;
+	draw();
 }
 
-void emulate_cycle(uint16_t opcode)
+void quit()
+{
+	cleanup();
+	free_mem();
+}
+
+void execute_opcode(uint16_t opcode)
 {
 	switch (opcode >> 12) {
 		case 0x0:
 			switch (opcode & 0xff) {
 				case 0xe0: cls_0(); break;
 				case 0xee: ret_0(); break;
-				default: printf("UNKNOWN 0"); break;
+				default: fprintf(stderr, "error: UNKNOWN 0"); break;
 			}
 			break;
 		case 0x1: jp_1(opcode & 0xfff); break;
@@ -55,7 +66,7 @@ void emulate_cycle(uint16_t opcode)
 				  case 0x6: shr_8((opcode >> 8) & 0xf); break;
 				  case 0x7: subn_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
 				  case 0xe: shl_8((opcode >> 8) & 0xf); break;
-				  default: printf("UNKNOWN 8");
+				  default: fprintf(stderr, "error: UNKNOWN 8");
 			  }
 			  break;
 		case 0x9: sne_9((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
@@ -67,7 +78,7 @@ void emulate_cycle(uint16_t opcode)
 			  switch (opcode & 0xff) {
 				  case 0x9e: skp_e((opcode >> 8) & 0xf); break;
 				  case 0xa1: sknp_e((opcode >> 8) & 0xf); break;
-				  default: printf("UNKNOWN E"); break;
+				  default: fprintf(stderr, "error: UNKNOWN E"); break;
 			  }
 			  break;
 		case 0xf:
@@ -81,9 +92,9 @@ void emulate_cycle(uint16_t opcode)
 				  case 0x33: ld_f33((opcode >> 8) & 0xf); break;
 				  case 0x55: ld_f55((opcode >> 8) & 0xf); break;
 				  case 0x65: ld_f65((opcode >> 8) & 0xf); break;
-				  default: printf("UNKNOWN F"); break;
+				  default: fprintf(stderr, "error: UNKNOWN F"); break;
 			  }
-		default: printf("UNKNOWN"); break;
+		default: fprintf(stderr, "error: UNKNOWN"); break;
 	}
 }
 
@@ -155,8 +166,7 @@ void shl_8(uint8_t nib)
 	cpu.v[nib] = (cpu.v[nib] << 1) & 0xff;
 }
 
-void sne_9(uint8_t nib1, uint8_t nib2) { if (cpu.v[nib1] != cpu.v[nib2]) { cpu.pc += 2; }
-}
+void sne_9(uint8_t nib1, uint8_t nib2) { if (cpu.v[nib1] != cpu.v[nib2]) { cpu.pc += 2; } }
 
 void ld_a(uint16_t address) { cpu.i = address; }
 
@@ -164,6 +174,7 @@ void jp_b(uint16_t address) { cpu.pc = address + cpu.v[0x0]; }
  
 void rnd_c(uint8_t nib, uint8_t byte) { cpu.v[nib] = (rand() % 0x100) & byte; }
 
+// incomplete
 void drw_d(uint8_t nib1, uint8_t nib2, uint8_t nib3)
 {
 	for (int j = 0; j < nib3; j++) {
