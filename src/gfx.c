@@ -3,9 +3,9 @@
 void init_gfx(char *title)
 {
 	gfx.draw = false;
-	for (int j = 0; j < 32; j++) {
-		for (int k = 0; k < 64; k++) {
-			gfx.screen[j][k] = 0;
+	for (int k = 0; k < WIDTH; k++) {
+		for (int j = 0; j < HEIGHT; j++) {
+			gfx.screen[k][j] = 0;
 		}
 	}
 
@@ -14,7 +14,7 @@ void init_gfx(char *title)
 		exit(1);
 	}
 
-	screen = SDL_SetVideoMode(640, 320, 0, SDL_HWPALETTE | SDL_DOUBLEBUF);
+	screen = SDL_SetVideoMode(WIDTH * 10, HEIGHT * 10, 0, SDL_HWPALETTE | SDL_DOUBLEBUF);
 
 	if (screen == NULL) {
 		fprintf(stderr, "Could not set video mode: %s.\n", SDL_GetError());
@@ -28,22 +28,24 @@ void draw()
 {
 	if (gfx.draw) {
 		SDL_Rect pixel;
-		uint32_t color = SDL_MapRGB(screen->format, 0xff, 0xff, 0xff);
-		for (int j = 0; j < 32; j++) {
-			for (int k = 0; k < 64; k++) {
-				if (gfx.screen[j][k]) {
-					pixel.x = k * 10;	
-					pixel.y = j * 10;	
-					pixel.w = 10;	
-					pixel.h = 10;	
-					SDL_FillRect(screen, &pixel, color);
+		pixel.w = 10;	
+		pixel.h = 10;	
+		uint32_t white = SDL_MapRGB(screen->format, 0xff, 0xff, 0xff);
+		uint32_t black = SDL_MapRGB(screen->format, 0x0, 0x0, 0x0);
+		for (int k = 0; k < WIDTH; k++) {
+			for (int j = 0; j < HEIGHT; j++) {
+				pixel.x = k * 10;	
+				pixel.y = j * 10;	
+				if (gfx.screen[k][j]) {
+					SDL_FillRect(screen, &pixel, white);
+				} else {
+					SDL_FillRect(screen, &pixel, black);
 				}
 			}
 		}
 		SDL_Flip(screen);
+		gfx.draw = false;
 	}
-
-	gfx.draw = false;
 }
 
 void cleanup()

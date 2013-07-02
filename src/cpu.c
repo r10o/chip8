@@ -2,10 +2,24 @@
 #include "gfx.h"
 #include "mem.h"
 #include "input.h"
+#if DEBUG == 1
+#include "dis.h"
+#endif
 
 extern void init_gfx(char *title);
 extern void draw();
 extern void cleanup();
+
+extern void init_input();
+extern void get_input();
+extern void clear_input();
+
+extern uint16_t init_mem(char *file_name);
+extern void free_mem();
+
+#if DEBUG == 1
+extern void op_dis(uint16_t pc, uint16_t opcode);
+#endif
 
 void init_cpu(char *file_name)
 {
@@ -14,22 +28,32 @@ void init_cpu(char *file_name)
 		cpu.stack[j] = 0;
 	}
 	cpu.i = 0;
-	cpu.dt = 0;
+	cpu.dt = 60;
 	cpu.st = 0;
 	cpu.pc = 0x200;
 	cpu.sp = 0;
-	init_mem(file_name);
+	uint16_t file_size = init_mem(file_name);
+	fprintf(stderr, "Loaded %d bytes.\n", file_size);
+	init_input();
 	init_gfx("Chip8 Emulator");
 }
 
 void emulate_cycle()
 {
-	get_input();
-	if (cpu.dt > 0) { --cpu.dt; }
-	if (cpu.dt > 0) { --cpu.st; }
-	execute_opcode((mem[cpu.pc] << 4) & mem[cpu.pc + 1]);
+	if (cpu.dt > 0) {
+		--cpu.dt;
+	}
+	if (cpu.dt > 0) {
+		--cpu.st;
+	}
+	uint16_t opcode = (mem[cpu.pc] << 8) | mem[cpu.pc + 1];
+#if DEBUG == 1
+	op_dis(cpu.pc, opcode);
+#endif
+	execute_opcode(opcode);
 	cpu.pc += 2;
 	draw();
+	get_input();
 }
 
 void quit()
@@ -45,7 +69,7 @@ void execute_opcode(uint16_t opcode)
 			switch (opcode & 0xff) {
 				case 0xe0: cls_0(); break;
 				case 0xee: ret_0(); break;
-				default: fprintf(stderr, "error: UNKNOWN 0"); break;
+				default: fprintf(stderr, "error: UNKNOWN 0; %04x\n", opcode); break;
 			}
 			break;
 		case 0x1: jp_1(opcode & 0xfff); break;
@@ -66,7 +90,7 @@ void execute_opcode(uint16_t opcode)
 				  case 0x6: shr_8((opcode >> 8) & 0xf); break;
 				  case 0x7: subn_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
 				  case 0xe: shl_8((opcode >> 8) & 0xf); break;
-				  default: fprintf(stderr, "error: UNKNOWN 8");
+				  default: fprintf(stderr, "error: UNKNOWN 8; %04x\n", opcode); break;
 			  }
 			  break;
 		case 0x9: sne_9((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
@@ -78,7 +102,7 @@ void execute_opcode(uint16_t opcode)
 			  switch (opcode & 0xff) {
 				  case 0x9e: skp_e((opcode >> 8) & 0xf); break;
 				  case 0xa1: sknp_e((opcode >> 8) & 0xf); break;
-				  default: fprintf(stderr, "error: UNKNOWN E"); break;
+				  default: fprintf(stderr, "error: UNKNOWN E; %04x\n", opcode); break;
 			  }
 			  break;
 		case 0xf:
@@ -92,39 +116,96 @@ void execute_opcode(uint16_t opcode)
 				  case 0x33: ld_f33((opcode >> 8) & 0xf); break;
 				  case 0x55: ld_f55((opcode >> 8) & 0xf); break;
 				  case 0x65: ld_f65((opcode >> 8) & 0xf); break;
-				  default: fprintf(stderr, "error: UNKNOWN F"); break;
+				  default: fprintf(stderr, "error: UNKNOWN F; %04x\n", opcode); break;
 			  }
-		default: fprintf(stderr, "error: UNKNOWN"); break;
+			  break;
+		default: fprintf(stderr, "error: UNKNOWN; %04x\n", opcode); break;
 	}
 }
 
-void cls_0() { gfx.draw = false; }
+void cls_0()
+{
+	for (int j = 0; j < HEIGHT; j++) {
+		for (int k = 0; k < WIDTH; k++) {
+			gfx.screen[k][j] = false;
+		}
+	}
+	gfx.draw = true;
+}
 
-void ret_0() { cpu.pc = cpu.stack[--cpu.sp]; }
+void ret_0()
+{
+	cpu.pc = cpu.stack[--cpu.sp];
+}
 
-void jp_1(uint16_t address) { cpu.pc = address; }
+void jp_1(uint16_t address)
+{
+	cpu.pc = address;
+	cpu.pc -= 2;
+}
 
-void call_2(uint16_t address) { cpu.stack[cpu.sp--] = cpu.pc; cpu.pc = address; }
+void call_2(uint16_t address)
+{
+	cpu.stack[cpu.sp++] = cpu.pc;
+	cpu.pc = address;
+	cpu.pc -= 2;
+}
 
-void se_3(uint8_t nib, uint8_t byte) { if (cpu.v[nib] == byte) { cpu.pc += 2; } }
+void se_3(uint8_t nib, uint8_t byte)
+{
+	if (cpu.v[nib] == byte) {
+		cpu.pc += 2;
+	}
+}
 
-void sne_4(uint8_t nib, uint8_t byte) { if (cpu.v[nib] != byte) { cpu.pc += 2; } }
+void sne_4(uint8_t nib, uint8_t byte)
+{
+	if (cpu.v[nib] != byte) {
+		cpu.pc += 2;
+	}
+}
 
-void se_5(uint8_t nib1, uint8_t nib2) { if (cpu.v[nib1] == cpu.v[nib2]) { cpu.pc += 2; } }
+void se_5(uint8_t nib1, uint8_t nib2)
+{
+	if (cpu.v[nib1] == cpu.v[nib2]) {
+		cpu.pc += 2;
+	}
+}
 
-void ld_6(uint8_t nib, uint8_t byte) { cpu.v[nib] = byte; }
+void ld_6(uint8_t nib, uint8_t byte)
+{
+	cpu.v[nib] = byte;
+}
 
-void add_7(uint8_t nib, uint8_t byte) { cpu.v[nib] += byte; }
+void add_7(uint8_t nib, uint8_t byte)
+{
+	cpu.v[nib] += byte;
+}
 
-void ld_8(uint8_t nib1, uint8_t nib2) { cpu.v[nib1] = cpu.v[nib2]; }
+void ld_8(uint8_t nib1, uint8_t nib2)
+{
+	cpu.v[nib1] = cpu.v[nib2];
+}
 
-void or_8(uint8_t nib1, uint8_t nib2) { cpu.v[nib1] |= cpu.v[nib2]; }
+void or_8(uint8_t nib1, uint8_t nib2)
+{
+	cpu.v[nib1] |= cpu.v[nib2];
+}
 
-void and_8(uint8_t nib1, uint8_t nib2) { cpu.v[nib1] &= cpu.v[nib1]; }
+void and_8(uint8_t nib1, uint8_t nib2)
+{
+	cpu.v[nib1] &= cpu.v[nib2];
+}
 
-void xor_8(uint8_t nib1, uint8_t nib2) { cpu.v[nib1] ^= cpu.v[nib2]; }
+void xor_8(uint8_t nib1, uint8_t nib2)
+{
+	cpu.v[nib1] ^= cpu.v[nib2];
+}
 
-void add_8(uint8_t nib1, uint8_t nib2) { cpu.v[nib1] += cpu.v[nib2]; }
+void add_8(uint8_t nib1, uint8_t nib2)
+{
+	cpu.v[nib1] += cpu.v[nib2];
+}
 
 void sub_8(uint8_t nib1, uint8_t nib2)
 {
@@ -166,41 +247,91 @@ void shl_8(uint8_t nib)
 	cpu.v[nib] = (cpu.v[nib] << 1) & 0xff;
 }
 
-void sne_9(uint8_t nib1, uint8_t nib2) { if (cpu.v[nib1] != cpu.v[nib2]) { cpu.pc += 2; } }
+void sne_9(uint8_t nib1, uint8_t nib2)
+{
+	if (cpu.v[nib1] != cpu.v[nib2]) {
+		cpu.pc += 2;
+	}
+}
 
-void ld_a(uint16_t address) { cpu.i = address; }
+void ld_a(uint16_t address)
+{
+	cpu.i = address;
+}
 
-void jp_b(uint16_t address) { cpu.pc = address + cpu.v[0x0]; }
+void jp_b(uint16_t address)
+{
+	cpu.pc = address + cpu.v[0x0];
+}
  
-void rnd_c(uint8_t nib, uint8_t byte) { cpu.v[nib] = (rand() % 0x100) & byte; }
+void rnd_c(uint8_t nib, uint8_t byte)
+{
+	cpu.v[nib] = (rand() % 0x100) & byte;
+}
 
-// incomplete
 void drw_d(uint8_t nib1, uint8_t nib2, uint8_t nib3)
 {
 	for (int j = 0; j < nib3; j++) {
+		uint16_t line = mem[cpu.i + j];
+		for (int k = 0; k < 8; k++) {
+			if ((line & (0x80 >> k)) != 0) {
+				if (gfx.screen[cpu.v[nib1] + k][cpu.v[nib2] + j] == 1) {
+					cpu.v[0xf] = 1;
+				}
+				gfx.screen[cpu.v[nib1] + k][cpu.v[nib2] + j] ^= 1;
+			}
+		}
 	}
 	gfx.draw = true;
 }
 
-void skp_e(uint8_t nib) { if (keys[cpu.v[nib]]) { cpu.pc += 2; } }
-
-void sknp_e(uint8_t nib) { if (!keys[cpu.v[nib]]) { cpu.pc += 2; } }
-
-void ld_f07(uint8_t nib) { cpu.v[nib] = cpu.dt; }
-
-// incomplete
-void ld_f0a(uint8_t nib)
+void skp_e(uint8_t nib)
 {
-	
+	if (keys[cpu.v[nib]]) {
+		cpu.pc += 2;
+	}
 }
 
-void ld_f15(uint8_t nib) { cpu.dt = cpu.v[nib]; }
+void sknp_e(uint8_t nib)
+{
+	if (!keys[cpu.v[nib]]) {
+		cpu.pc += 2;
+	}
+}
 
-void ld_f18(uint8_t nib) { cpu.st = cpu.v[nib]; }
+void ld_f07(uint8_t nib)
+{
+	cpu.v[nib] = cpu.dt;
+}
 
-void add_f(uint8_t nib) { cpu.i += cpu.v[nib]; }
+void ld_f0a(uint8_t nib)
+{
+	for (int j = 0; j < 0x10; j++) {
+		if (keys[j] == down) {
+			cpu.v[nib] = keys[j];
+		}
+	}
+}
 
-void ld_f29(uint8_t nib) { cpu.i = cpu.v[nib] * 5; }
+void ld_f15(uint8_t nib)
+{
+	cpu.dt = cpu.v[nib];
+}
+
+void ld_f18(uint8_t nib)
+{
+	cpu.st = cpu.v[nib];
+}
+
+void add_f(uint8_t nib)
+{
+	cpu.i += cpu.v[nib];
+}
+
+void ld_f29(uint8_t nib)
+{
+	cpu.i = cpu.v[nib] * 5;
+}
 
 void ld_f33(uint8_t nib)
 { 
@@ -209,6 +340,16 @@ void ld_f33(uint8_t nib)
 	mem[cpu.i + 2] = cpu.v[nib] % 10;
 }
 
-void ld_f55(uint8_t nib) { for (int j = 0; j <= nib; j++) { mem[cpu.i + j] = cpu.v[j]; } }
+void ld_f55(uint8_t nib)
+{
+	for (int j = 0; j <= nib; j++) {
+		mem[cpu.i + j] = cpu.v[j];
+	}
+}
 
-void ld_f65(uint8_t nib) { for (int j = 0; j <= nib; j++) { cpu.v[j] = mem[cpu.i + j]; } }
+void ld_f65(uint8_t nib)
+{
+	for (int j = 0; j <= nib; j++) {
+		cpu.v[j] = mem[cpu.i + j];
+	}
+}

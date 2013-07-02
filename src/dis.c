@@ -1,12 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
+#include "dis.h"
 
-void opDis(uint8_t *file_buffer, int current_pc)
+void op_dis(uint16_t pc, uint16_t opcode)
 {
-	uint8_t first_byte = file_buffer[current_pc];
-	uint8_t second_byte = file_buffer[current_pc + 1];
-	printf("%02x %02x %02x ", current_pc, first_byte, second_byte);
+	uint8_t first_byte = opcode >> 8;
+	uint8_t second_byte = opcode & 0xff;
+	printf("%02x %02x %02x ", pc, first_byte, second_byte);
 	switch(first_byte >> 4) {
 		case 0x0:
 			switch((first_byte << 8) | second_byte) {
@@ -60,32 +58,5 @@ void opDis(uint8_t *file_buffer, int current_pc)
 				  default: printf("UNKNOWN F"); break;
 			  }
 	}
-}
-
-int main(int argc, char *argv[])
-{
-	if(argc < 2) { printf("Usage: disassembler [file]\n"); return -1; }
-
-	FILE *file = fopen(argv[1], "r");
-	if(file == NULL) { printf("error: Could not open %s\n", argv[1]); return -1; }
-
-	fseek(file, 0L, SEEK_END);
-	uint16_t file_size = ftell(file);
-	fseek(file, 0L, SEEK_SET);
-
-	uint8_t *buffer = malloc(file_size + 0x200);
-	fread(buffer + 0x200, file_size, 1, file);
-
-	fclose(file);
-
-	int pc = 0x200;
-
-	while(pc < (file_size + 0x200)) {
-		opDis(buffer, pc);
-		pc += 2;
-		printf("\n");
-	}
-
-	free(buffer);
-	return 0;
+	printf("\n");
 }

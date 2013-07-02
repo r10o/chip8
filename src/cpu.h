@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define DEBUG 1
+
 struct chip8_cpu {
 	/* Registers */
-	uint8_t v[16];
+	uint8_t v[0x10];
 	uint16_t i;
 	uint8_t dt;
 	uint8_t st;

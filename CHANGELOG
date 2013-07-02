@@ -1,3 +1,20 @@
+0.0.1 -> 0.0.2
+2013-06-27
+
+general
+	[*] Fixed some mistakes in the README
+	[*] Implemented simple debugger
+cpu
+	[*] Finished opcode execution
+	[*] Made changes to both CLS and DRW opcode instructions
+gfx
+	[*] Changed the draw execution to a proper xor
+input
+	[*] Finished input management
+	[*] Input now uses a different set of controls, see README for more information
+
+Notes: Hopefully the graphics work! There are still many issues to sort out, but things will draw to the screen!
+
 -> 0.0.1
 2013-06-26
 
@@ -14,3 +31,7 @@ gfx
 	[*] Completed graphic management
 input
 	[*] Began input management
+mem
+	[*] Memory management is complete
+
+Notes: This is a pre-alpha release. Almost nothing works. Ok, maybe the memory works, but even that's pretty questionable.

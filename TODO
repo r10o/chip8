@@ -7,9 +7,9 @@ TODO
 
 # NOT URGENT
 : Clean up structure of code
+: Optimize code
 
 # OPTIONAL
 : Extend gui
 : Implement Super Chip8 features
 : Experiment with other game loop structures for better performance
-: Debugger

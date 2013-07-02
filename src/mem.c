@@ -17,8 +17,10 @@ uint16_t init_mem(char *file_name)
 		fprintf(stderr, "error: Could not open %s.\n", file_name);
 		exit(EXIT_FAILURE);
 	}
-
 	return file_size;
 }
 
-void free_mem() { free(mem); }
+void free_mem()
+{
+	free(mem);
+}

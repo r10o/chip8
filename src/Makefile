@@ -23,6 +23,8 @@ $(BIN): $(OBJ)
 	@echo CC -o $@
 	@$(CC) $(OBJ) -o $(BIN) $(LFLAGS)
 
+force: clean options $(BIN)
+
 clean:
 	@echo Cleaning.
 	@rm -rf *.o $(BIN)
