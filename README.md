@@ -9,22 +9,70 @@ This is my attempt at making a simple chip-8 emulator. This project is purely ed
 This is currently a work in progress. It does not work at the moment; all you will see is a black screen. Stay tuned for updates.
 
 ## How to build
-Just run __make__ when you are in the src directory.
+Just run `make` when you are in the src directory.
 
 ## Usage
 chip8 [file]
 Simple. I might implement some sort of debugger later which could complicate this later.
 
 ## Controls
-Controls are simple. On an actual Chip-8 device a key board would look something like this:
+Controls are simple. On an actual Chip-8 device a key board would look like this:
 
-|1|2|3|c|
-|-|-|-|-|
-|4|5|6|d|
-|7|8|9|e|
-|a|0|b|f|
+<table>
+	<tr>
+		<td>1</td>
+		<td>2</td>
+		<td>3</td>
+		<td>c</td>
+	</tr>
+	<tr>
+		<td>4</td>
+		<td>5</td>
+		<td>6</td>
+		<td>d</td>
+	</tr>
+	<tr>
+		<td>7</td>
+		<td>8</td>
+		<td>9</td>
+		<td>e</td>
+	</tr>
+	<tr>
+		<td>a</td>
+		<td>0</td>
+		<td>b</td>
+		<td>f</td>
+	</tr>
+</table>
 
 In this emulator they are:
+
+<table>
+	<tr>
+		<td>1</td>
+		<td>2</td>
+		<td>3</td>
+		<td>4</td>
+	</tr>
+	<tr>
+		<td>q</td>
+		<td>w</td>
+		<td>e</td>
+		<td>r</td>
+	</tr>
+	<tr>
+		<td>a</td>
+		<td>s</td>
+		<td>d</td>
+		<td>f</td>
+	</tr>
+	<tr>
+		<td>z</td>
+		<td>x</td>
+		<td>c</td>
+		<td>v</td>
+	</tr>
+</table>
 
 ## What is a "Chip-8"?
 Check out this wikipedia [article](http://en.wikipedia.org/wiki/CHIP-8) for more information. Here is the introduction on wikipedia:
