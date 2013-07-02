@@ -19,38 +19,12 @@ Simple. I might implement some sort of debugger later which could complicate thi
 Controls are simple. On an actual Chip-8 device a key board would look something like this:
 
 |1|2|3|c|
+|-|-|-|-|
 |4|5|6|d|
 |7|8|9|e|
 |a|0|b|f|
 
 In this emulator they are:
-
-<table>
-	<tr>
-		<td>1</td>
-		<td>2</td>
-		<td>3</td>
-		<td>4</td>
-	</tr>
-	<tr>
-		<td>q</td>
-		<td>w</td>
-		<td>e</td>
-		<td>r</td>
-	</tr>
-	<tr>
-		<td>a</td>
-		<td>s</td>
-		<td>d</td>
-		<td>f</td>
-	</tr>
-	<tr>
-		<td>z</td>
-		<td>x</td>
-		<td>c</td>
-		<td>v</td>
-	</tr>
-</table>
 
 ## What is a "Chip-8"?
 Check out this wikipedia [article](http://en.wikipedia.org/wiki/CHIP-8) for more information. Here is the introduction on wikipedia:
