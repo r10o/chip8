@@ -9,7 +9,7 @@ void init_gfx(char *title)
 		}
 	}
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
 		fprintf(stderr, "Could not initialize SDL: %s.\n", SDL_GetError());
 		exit(1);
 	}

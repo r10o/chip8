@@ -4,8 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEBUG 1
-
 struct chip8_cpu {
 	/* Registers */
 	uint8_t v[0x10];

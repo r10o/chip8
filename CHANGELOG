@@ -1,3 +1,19 @@
+0.0.2 -> 0.1.0
+2013-06-27
+
+general
+	[*] Made a few more changes to the README
+	[*] Debugger made more permanent
+cpu
+	[*] Fixed several bugs in the opcode execution
+	[*] The ADD and SUB opcodes were fixed
+gfx
+	[*] Graphics will now draw properly in most games
+input
+	[*] Debugger now uses input to start and stop the program (still does not work as intended)
+
+Notes: A lot more games work now. A couple games, breakout and brix, have a couple bugs that still need to be worked out.
+
 0.0.1 -> 0.0.2
 2013-06-27
 

@@ -9,7 +9,8 @@ This is my attempt at making a simple chip-8 emulator. This project is purely ed
 This is currently a work in progress. It does not work at the moment; all you will see is a black screen. Stay tuned for updates.
 
 ## How to build
-Just run `make` when you are in the src directory.
+To build on linux, just run `make` when you are in the src directory.
+Requires SDL.
 
 ## Usage
 chip8 [file]
@@ -81,8 +82,8 @@ Check out this wikipedia [article](http://en.wikipedia.org/wiki/CHIP-8) for more
 > the mid-1970s. CHIP-8 programs are run on a CHIP-8 virtual machine. It was made
 > to allow video games to be more easily programmed for said computers.
 
-## Information
-See the changelog and todo list for more information.
-
 ## Games
 All the games are written by David Winter and can be found [here](http://www.pong-story.com/chip8/).
+
+## More Info
+See the changelog and todo list for more information.

@@ -1,9 +1,8 @@
 TODO
 
 # URGENT
-: Finish the execution of optcodes
-: Implement a way to store screen information for drawing
-: Find a way to manage input (current way is too complicated)
+: Implement sound
+: Fix collisions
 
 # NOT URGENT
 : Clean up structure of code

@@ -2,9 +2,7 @@
 #include "gfx.h"
 #include "mem.h"
 #include "input.h"
-#if DEBUG == 1
 #include "dis.h"
-#endif
 
 extern void init_gfx(char *title);
 extern void draw();
@@ -17,9 +15,7 @@ extern void clear_input();
 extern uint16_t init_mem(char *file_name);
 extern void free_mem();
 
-#if DEBUG == 1
 extern void op_dis(uint16_t pc, uint16_t opcode);
-#endif
 
 void init_cpu(char *file_name)
 {
@@ -47,9 +43,7 @@ void emulate_cycle()
 		--cpu.st;
 	}
 	uint16_t opcode = (mem[cpu.pc] << 8) | mem[cpu.pc + 1];
-#if DEBUG == 1
 	op_dis(cpu.pc, opcode);
-#endif
 	execute_opcode(opcode);
 	cpu.pc += 2;
 	draw();
@@ -204,17 +198,22 @@ void xor_8(uint8_t nib1, uint8_t nib2)
 
 void add_8(uint8_t nib1, uint8_t nib2)
 {
+	if ((cpu.v[nib1] + cpu.v[nib2]) > 0xff) {
+		cpu.v[0xf] = 1;
+	} else {
+		cpu.v[0xf] = 0;
+	}
 	cpu.v[nib1] += cpu.v[nib2];
 }
 
 void sub_8(uint8_t nib1, uint8_t nib2)
 {
-	cpu.v[nib1] -= cpu.v[nib2];
 	if (cpu.v[nib1] > cpu.v[nib2]) {
 		cpu.v[0xf] = 1;
 	} else {
 		cpu.v[0xf] = 0;
 	}
+	cpu.v[nib1] -= cpu.v[nib2];
 }
 
 void shr_8(uint8_t nib)
@@ -229,12 +228,12 @@ void shr_8(uint8_t nib)
 
 void subn_8(uint8_t nib1, uint8_t nib2)
 {
-	cpu.v[nib1] = cpu.v[nib2] - cpu.v[nib1];
 	if (cpu.v[nib2] > cpu.v[nib1]) {
 		cpu.v[0xf] = 1;
 	} else {
 		cpu.v[0xf] = 0;
 	}
+	cpu.v[nib1] = cpu.v[nib2] - cpu.v[nib1];
 }
 
 void shl_8(uint8_t nib)
