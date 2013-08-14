@@ -1,8 +1,8 @@
 TODO
 
 # URGENT
-: Implement sound
-: Fix collisions
+: Fix sound implementation
+: Fix the draw opcode
 
 # NOT URGENT
 : Clean up structure of code

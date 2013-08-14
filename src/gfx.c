@@ -10,14 +10,14 @@ void init_gfx(char *title)
 	}
 
 	if (SDL_Init(SDL_INIT_VIDEO) == -1) {
-		fprintf(stderr, "Could not initialize SDL: %s.\n", SDL_GetError());
+		fprintf(stderr, "error: Could not initialize SDL: %s.\n", SDL_GetError());
 		exit(1);
 	}
 
 	screen = SDL_SetVideoMode(WIDTH * 10, HEIGHT * 10, 0, SDL_HWPALETTE | SDL_DOUBLEBUF);
 
 	if (screen == NULL) {
-		fprintf(stderr, "Could not set video mode: %s.\n", SDL_GetError());
+		fprintf(stderr, "error: Could not set video mode: %s.\n", SDL_GetError());
 		exit(1);
 	}
 
@@ -46,9 +46,4 @@ void draw()
 		SDL_Flip(screen);
 		gfx.draw = false;
 	}
-}
-
-void cleanup()
-{
-	SDL_Quit();
 }

@@ -4,8 +4,8 @@ SRC	= $(wildcard *.c)
 HDR	= $(wildcard *.h)
 OBJ	= $(SRC:.c=.o)
 
-CFLAGS	= -Wall -Wextra -g -pedantic -std=c99 
-LFLAGS	= `sdl-config --libs` -lSDL
+CFLAGS	= -Wall -Wextra -g -pedantic -std=c99
+LFLAGS	= -lSDL -lSDL_mixer
 
 all: options $(BIN)
 

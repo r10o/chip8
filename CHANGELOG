@@ -1,5 +1,16 @@
+0.1.0 -> 0.1.1
+2013-07-07
+
+general
+	[*] Corrected dates in the changelog
+	[*] Made the debugger simpler
+sound
+	[*] Sound implementation has begun
+
+Notes: The emulator is still very buggy. Breakout, brix and invaders are still not working properly. The implementation of the sound works, but needs to be improved.
+
 0.0.2 -> 0.1.0
-2013-06-27
+2013-07-03
 
 general
 	[*] Made a few more changes to the README
@@ -15,7 +26,7 @@ input
 Notes: A lot more games work now. A couple games, breakout and brix, have a couple bugs that still need to be worked out.
 
 0.0.1 -> 0.0.2
-2013-06-27
+2013-07-01
 
 general
 	[*] Fixed some mistakes in the README

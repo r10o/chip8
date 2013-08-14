@@ -2,11 +2,11 @@
 #include "gfx.h"
 #include "mem.h"
 #include "input.h"
+#include "sound.h"
 #include "dis.h"
 
 extern void init_gfx(char *title);
 extern void draw();
-extern void cleanup();
 
 extern void init_input();
 extern void get_input();
@@ -16,6 +16,10 @@ extern uint16_t init_mem(char *file_name);
 extern void free_mem();
 
 extern void op_dis(uint16_t pc, uint16_t opcode);
+
+extern void init_audio();
+extern void play();
+extern void close_audio();
 
 void init_cpu(char *file_name)
 {
@@ -29,9 +33,10 @@ void init_cpu(char *file_name)
 	cpu.pc = 0x200;
 	cpu.sp = 0;
 	uint16_t file_size = init_mem(file_name);
-	fprintf(stderr, "Loaded %d bytes.\n", file_size);
+	printf("Loaded %d bytes.\n", file_size);
 	init_input();
 	init_gfx("Chip8 Emulator");
+	init_audio();
 }
 
 void emulate_cycle()
@@ -39,20 +44,21 @@ void emulate_cycle()
 	if (cpu.dt > 0) {
 		--cpu.dt;
 	}
-	if (cpu.dt > 0) {
+	if (cpu.st > 0) {
 		--cpu.st;
+		play();
 	}
 	uint16_t opcode = (mem[cpu.pc] << 8) | mem[cpu.pc + 1];
-	op_dis(cpu.pc, opcode);
+//	op_dis(cpu.pc, opcode);
 	execute_opcode(opcode);
-	cpu.pc += 2;
 	draw();
 	get_input();
+	cpu.pc += 2;
 }
 
 void quit()
 {
-	cleanup();
+	close_audio();
 	free_mem();
 }
 
@@ -261,6 +267,7 @@ void ld_a(uint16_t address)
 void jp_b(uint16_t address)
 {
 	cpu.pc = address + cpu.v[0x0];
+	cpu.pc -= 2;
 }
  
 void rnd_c(uint8_t nib, uint8_t byte)
