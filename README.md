@@ -1,6 +1,6 @@
 # Chip-8 Emu
 ## A chip-8 Emulator written in C
-### Version 0.0.2
+### Version 0.1.1
 
 ## Introduction
 This is my attempt at making a simple chip-8 emulator. This project is purely educational, and is freely available under the MIT License.
