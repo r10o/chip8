@@ -12,7 +12,7 @@ extern void quit();
 int main(int argc, char *argv[])
 {
 	if (argc == 1) {
-		printf("Usage: chip8 [option] [file]\n");
+		printf("Usage: chip8 [file]\n");
 		return 1;
 	}
 	init_cpu(argv[1]);

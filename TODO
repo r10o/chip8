@@ -1,10 +1,11 @@
 TODO
 
-# URGENT
+# HIGH
 : Fix sound implementation
 : Fix the draw opcode
 
-# NOT URGENT
+# LOW
+: Comment code
 : Clean up structure of code
 : Optimize code
 
