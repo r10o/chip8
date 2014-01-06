@@ -1,15 +1,15 @@
 TODO
 
-# HIGH
-: Fix sound implementation
-: Fix the draw opcode
+sound:
+	+ Change sound implementation
 
-# LOW
-: Comment code
-: Clean up structure of code
-: Optimize code
+gfx:
+	+ Fix the draw opcode
+	* Extend gui
 
-# OPTIONAL
-: Extend gui
-: Implement Super Chip8 features
-: Experiment with other game loop structures for better performance
+general
+	- Comment code
+	- Clean up structure of code
+	- Optimize code
+	* Implement Super Chip8 features
+	* Experiment with other game loop structures for better performance

@@ -1,3 +1,13 @@
+0.1.2 (2013-10-29):
+general
+	* Made changes to the Readme
+	* Arguments now work
+	* Added a new Makefile
+
+sound
+	* Changed the method of sound implementation (still a work in
+	progress)
+
 0.1.1 (2013-07-07):
 
 general
@@ -7,7 +17,8 @@ general
 sound
 	* Sound implementation has begun
 
-Notes: The emulator is still very buggy. Breakout, brix and invaders are still not working properly. The implementation of the sound works, but needs to be improved.
+Notes: The emulator is still very buggy. Breakout, brix and invaders are still
+not working properly. The implementation of the sound works, but needs to be improved.
 
 0.1.0 (2013-07-03):
 
@@ -23,9 +34,11 @@ gfx
 	* Graphics will now draw properly in most games
 
 input
-	* Debugger now uses input to start and stop the program (still does not work as intended)
+	* Debugger now uses input to start and stop the program (still does not
+	work as intended)
 
-Notes: A lot more games work now. A couple games, breakout and brix, have a couple bugs that still need to be worked out.
+Notes: A lot more games work now. A couple games, breakout and brix, have a
+couple bugs that still need to be worked out.
 
 0.0.2 (2013-07-01):
 
@@ -42,9 +55,11 @@ gfx
 
 input
 	* Finished input management
-	* Input now uses a different set of controls, see README for more information
+	* Input now uses a different set of controls, see README for more
+	information
 
-Notes: Hopefully the graphics work! There are still many issues to sort out, but things will draw to the screen!
+Notes: Hopefully the graphics work! There are still many issues to sort out, but
+things will draw to the screen!
 
 0.0.1 (2013-06-26):
 
@@ -68,4 +83,5 @@ input
 mem
 	* Memory management is complete
 
-Notes: This is a pre-alpha release. Almost nothing works. Ok, maybe the memory works, but even that's pretty questionable.
+Notes: This is a pre-alpha release. Almost nothing works. Ok, maybe the memory
+works, but even that's pretty questionable.

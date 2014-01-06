@@ -1,13 +1,12 @@
 # Chip8
-## Version 0.1.1
+## Version 0.1.2
 ### by stykr
 
 ## Introduction
 
 Chip8 is a simple CHIP-8 emulator written in C.
 
-This is currently a work in progress. It does not work at the moment; all you
-will see is a black screen. Stay tuned for updates.
+This is currently a work in progress. Do not expect anything to work at the moment.
 
 ## Installation & Requirements
 
@@ -17,9 +16,7 @@ To install on linux, run `sudo make install`.
 
 ## Usage
 
-chip8 [-v] [file]
-
-
+chip8 [-hv] [file]
 
 ## Controls
 

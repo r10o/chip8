@@ -14,7 +14,7 @@ void init_audio()
 		exit(1);
 	}
 
-	beep = Mix_LoadWAV("../ogg/beep.ogg");
+	beep = Mix_LoadWAV("ogg/beep.ogg");
 
 	if (beep == NULL) {
 		fprintf(stderr, "error: Could not load audio file: %s.\n", SDL_GetError());

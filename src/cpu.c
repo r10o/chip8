@@ -21,6 +21,8 @@ extern void init_audio();
 extern void play();
 extern void close_audio();
 
+static bool played = false;
+
 void init_cpu(char *file_name)
 {
 	for (int j = 0; j < 16; j++) {
@@ -46,10 +48,16 @@ void emulate_cycle()
 	}
 	if (cpu.st > 0) {
 		--cpu.st;
-		play();
+		if (!played) {
+			play();
+			played = true;
+		}
+	}
+	else {
+		played = false;
 	}
 	uint16_t opcode = (mem[cpu.pc] << 8) | mem[cpu.pc + 1];
-//	op_dis(cpu.pc, opcode);
+	op_dis(cpu.pc, opcode);
 	execute_opcode(opcode);
 	draw();
 	get_input();
@@ -80,45 +88,45 @@ void execute_opcode(uint16_t opcode)
 		case 0x6: ld_6((opcode >> 8) & 0xf, opcode & 0xff); break;
 		case 0x7: add_7((opcode >> 8) & 0xf, opcode & 0xff); break;
 		case 0x8:
-			  switch (opcode & 0xf) {
-				  case 0x0: ld_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0x1: or_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0x2: and_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0x3: xor_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0x4: add_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0x5: sub_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0x6: shr_8((opcode >> 8) & 0xf); break;
-				  case 0x7: subn_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
-				  case 0xe: shl_8((opcode >> 8) & 0xf); break;
-				  default: fprintf(stderr, "error: UNKNOWN 8; %04x\n", opcode); break;
-			  }
-			  break;
+			switch (opcode & 0xf) {
+				case 0x0: ld_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0x1: or_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0x2: and_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0x3: xor_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0x4: add_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0x5: sub_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0x6: shr_8((opcode >> 8) & 0xf); break;
+				case 0x7: subn_8((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
+				case 0xe: shl_8((opcode >> 8) & 0xf); break;
+				default: fprintf(stderr, "error: UNKNOWN 8; %04x\n", opcode); break;
+			}
+			break;
 		case 0x9: sne_9((opcode >> 8) & 0xf, (opcode >> 4) & 0xf); break;
 		case 0xa: ld_a(opcode & 0xfff); break;
 		case 0xb: jp_b(opcode & 0xfff); break;
 		case 0xc: rnd_c((opcode >> 8) & 0xf, opcode & 0xff); break;
 		case 0xd: drw_d((opcode >> 8) & 0xf, (opcode >> 4) & 0xf, opcode & 0xf); break;
 		case 0xe:
-			  switch (opcode & 0xff) {
-				  case 0x9e: skp_e((opcode >> 8) & 0xf); break;
-				  case 0xa1: sknp_e((opcode >> 8) & 0xf); break;
-				  default: fprintf(stderr, "error: UNKNOWN E; %04x\n", opcode); break;
-			  }
-			  break;
+			switch (opcode & 0xff) {
+			      case 0x9e: skp_e((opcode >> 8) & 0xf); break;
+			      case 0xa1: sknp_e((opcode >> 8) & 0xf); break;
+			      default: fprintf(stderr, "error: UNKNOWN E; %04x\n", opcode); break;
+			}
+			break;
 		case 0xf:
-			  switch (opcode & 0xff) {
-				  case 0x07: ld_f07((opcode >> 8) & 0xf); break;
-				  case 0x0a: ld_f0a((opcode >> 8) & 0xf); break;
-				  case 0x15: ld_f15((opcode >> 8) & 0xf); break;
-				  case 0x18: ld_f18((opcode >> 8) & 0xf); break;
-				  case 0x1e: add_f((opcode >> 8) & 0xf); break;
-				  case 0x29: ld_f29((opcode >> 8) & 0xf); break;
-				  case 0x33: ld_f33((opcode >> 8) & 0xf); break;
-				  case 0x55: ld_f55((opcode >> 8) & 0xf); break;
-				  case 0x65: ld_f65((opcode >> 8) & 0xf); break;
-				  default: fprintf(stderr, "error: UNKNOWN F; %04x\n", opcode); break;
-			  }
-			  break;
+			switch (opcode & 0xff) {
+				case 0x07: ld_f07((opcode >> 8) & 0xf); break;
+				case 0x0a: ld_f0a((opcode >> 8) & 0xf); break;
+				case 0x15: ld_f15((opcode >> 8) & 0xf); break;
+				case 0x18: ld_f18((opcode >> 8) & 0xf); break;
+				case 0x1e: add_f((opcode >> 8) & 0xf); break;
+				case 0x29: ld_f29((opcode >> 8) & 0xf); break;
+				case 0x33: ld_f33((opcode >> 8) & 0xf); break;
+				case 0x55: ld_f55((opcode >> 8) & 0xf); break;
+				case 0x65: ld_f65((opcode >> 8) & 0xf); break;
+				default: fprintf(stderr, "error: UNKNOWN F; %04x\n", opcode); break;
+			}
+			break;
 		default: fprintf(stderr, "error: UNKNOWN; %04x\n", opcode); break;
 	}
 }
