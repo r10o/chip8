@@ -1,4 +1,13 @@
-0.1.2 (2013-10-29):
+0.2.0 (2014-01-24):
+general
+	* Made minor formatting changes
+
+cpu
+	* Fixed random number generation bug
+	* Fixed subtraction carry flag bug
+
+Notes: Starting to fix some bugs in the opcode execution code. Games run much
+better, but it is still incomplete.
 
 0.1.2 (2013-10-29):
 general
