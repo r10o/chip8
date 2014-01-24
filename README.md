@@ -6,7 +6,7 @@
 
 Chip8 is a simple CHIP-8 emulator written in C.
 
-This is currently a work in progress. Do not expect anything to work at the moment.
+This is currently a work in progress. Do not expect anything to work correctly at the moment.
 
 ## Installation & Requirements
 

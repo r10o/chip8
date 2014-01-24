@@ -4,7 +4,7 @@ sound:
 	+ Change sound implementation
 
 gfx:
-	+ Fix the draw opcode
+	+ d:Fix the draw opcode
 	* Extend gui
 
 general

@@ -5,3 +5,4 @@ Mix_Chunk *beep;
 
 void init_audio();
 void play();
+

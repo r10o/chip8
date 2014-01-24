@@ -91,3 +91,4 @@ void clear_input()
 			break;
 	}
 }
+

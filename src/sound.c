@@ -35,3 +35,4 @@ void close_audio()
 	Mix_FreeChunk(beep);
 	Mix_CloseAudio();
 }
+

@@ -5,6 +5,8 @@
 #include "sound.h"
 #include "dis.h"
 
+#include <time.h>
+
 extern void init_gfx(char *title);
 extern void draw();
 
@@ -223,9 +225,9 @@ void add_8(uint8_t nib1, uint8_t nib2)
 void sub_8(uint8_t nib1, uint8_t nib2)
 {
 	if (cpu.v[nib1] > cpu.v[nib2]) {
-		cpu.v[0xf] = 1;
-	} else {
 		cpu.v[0xf] = 0;
+	} else {
+		cpu.v[0xf] = 1;
 	}
 	cpu.v[nib1] -= cpu.v[nib2];
 }
@@ -280,6 +282,7 @@ void jp_b(uint16_t address)
  
 void rnd_c(uint8_t nib, uint8_t byte)
 {
+	srand(time(NULL));
 	cpu.v[nib] = (rand() % 0x100) & byte;
 }
 
@@ -367,3 +370,4 @@ void ld_f65(uint8_t nib)
 		cpu.v[j] = mem[cpu.i + j];
 	}
 }
+

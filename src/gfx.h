@@ -19,3 +19,4 @@ SDL_Surface *screen;
 void init_gfx(char *title);
 void draw();
 #endif
+
