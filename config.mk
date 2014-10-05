@@ -13,7 +13,7 @@ SRC := $(wildcard src/*.c)
 OBJ := $(SRC:.c=.o)
 
 # Libraries
-LIBS		:= -lSDL
+LIBS		:= $(shell sdl-config --libs)
 LIBS		+= -lSDL_mixer
 
 # Name of output file
@@ -24,7 +24,8 @@ LIB_LN_V	:=
 # CFLAGS
 CFLAGS		:= -Wall 
 CFLAGS		+= -pipe
-CLFAGS		+= -std=c99
+CFLAGS		+= -std=c99
+CFLAGS		+= $(shell sdl-config --cflags)
 
 # Defines
 CFLAGS		+= -DVERSION=\"$(VERSION)\"
