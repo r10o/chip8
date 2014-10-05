@@ -41,6 +41,7 @@ void init_cpu(char *file_name)
 	init_input();
 	init_gfx("Chip8 Emulator");
 	init_audio();
+	printf("this");
 }
 
 void emulate_cycle()
@@ -219,7 +220,7 @@ void add_8(uint8_t nib1, uint8_t nib2)
 	} else {
 		cpu.v[0xf] = 0;
 	}
-	cpu.v[nib1] += cpu.v[nib2];
+	cpu.v[nib1] = (cpu.v[nib1] + cpu.v[nib2]) & 0xff;
 }
 
 void sub_8(uint8_t nib1, uint8_t nib2)

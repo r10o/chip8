@@ -2,6 +2,8 @@
 ## Version 0.1.2
 ### by stykr
 
+![](https://travis-ci.org/stykr/chip8.svg)
+
 ## Introduction
 
 Chip8 is a simple CHIP-8 emulator written in C.
