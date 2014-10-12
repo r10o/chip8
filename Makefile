@@ -43,6 +43,7 @@ options:
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
+	@mkdir -p bin
 	@echo -e "\n>> linking object files into a shared library <<\n"
 	$(CC) $(LDFLAGS) $(OBJ) -o $(DIR)/$(OUTPUT)
 	@echo -e "\n>> done compiling <<"
