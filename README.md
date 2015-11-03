@@ -8,13 +8,13 @@
 
 Chip8 is a simple CHIP-8 emulator written in C.
 
-This is currently a work in progress. Do not expect anything to work correctly at the moment.
+This is currently a WIP. Please check back later for updates.
 
 ## Installation & Requirements
 
 Requires SDL.
 
-To install on linux, run `sudo make install`.
+To build on linux run `make`.
 
 ## Usage
 
@@ -22,7 +22,7 @@ chip8 [-hv] [file]
 
 ## Controls
 
-On an actual Chip-8 device a keyboard would look like this:
+The keyboard on a CHIP-8 looks resembles the following table:
 
 	+---+---+---+---+
 	| 1 | 2 | 3 | c |
@@ -34,7 +34,7 @@ On an actual Chip-8 device a keyboard would look like this:
 	| a | 0 | b | f |
 	+---+---+---+---+
 
-In this emulator the controls look like this:
+In this emulator the controls match up as seen below:
 
 	+---+---+---+---+
 	| 1 | 2 | 3 | 4 |
@@ -46,7 +46,7 @@ In this emulator the controls look like this:
 	| z | x | c | v |
 	+---+---+---+---+
 
-## What is a "Chip-8"?
+## What is a "CHIP-8"?
 
 Check out this wikipedia [article](http://en.wikipedia.org/wiki/CHIP-8) for more
 information. Here is the introduction on wikipedia:
@@ -58,7 +58,7 @@ information. Here is the introduction on wikipedia:
 
 ## Games
 
-All the games were written by David Winter and can be found
+David Winter has written several games for the CHIP-8 which can be found
 [here](http://www.pong-story.com/chip8/).
 
 ## More Info
@@ -69,7 +69,7 @@ See the Changelog and TODO list for more information.
 
 The MIT License (MIT)
 
-Copyright (c) 2013 stykr
+Copyright (c) 2013 Rohan Rao
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
