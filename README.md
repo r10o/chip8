@@ -1,6 +1,5 @@
 # Chip8
 ## Version 0.1.2
-### by stykr
 
 ![](https://travis-ci.org/stykr/chip8.svg)
 
