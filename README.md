@@ -1,7 +1,7 @@
 # Chip8
 ## Version 0.1.2
 
-![](https://travis-ci.org/stykr/chip8.svg)
+![](https://travis-ci.org/r10o/chip8.svg?branch=master)
 
 ## Introduction
 
