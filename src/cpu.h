@@ -23,6 +23,7 @@ struct chip8_cpu cpu;
 void init_cpu();
 void execute_opcode(uint16_t opcode);
 void emulate_cycle();
+void quit();
 
 #endif
 
