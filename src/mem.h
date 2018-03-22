@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-uint16_t init_mem();
+void init_mem(uint8_t *, char *);
 
 #endif
 

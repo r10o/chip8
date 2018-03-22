@@ -20,29 +20,43 @@ static const uint8_t font[] = {
 	0xf0, 0x80, 0x80, 0x80, 0xf0, // c
 	0xe0, 0x90, 0x90, 0x90, 0xe0, // d
 	0xf0, 0x80, 0xf0, 0x80, 0xf0, // e
-	0xf0, 0x80, 0xf0, 0x80, 0x80, // f
+	0xf0, 0x80, 0xf0, 0x80, 0x80  // f
 };
 
-uint16_t init_mem(uint8_t *mem, char *file_name)
+void init_mem(uint8_t *mem, char *file_name)
 {
 	uint16_t file_size = 0;
 	FILE *file = fopen(file_name, "r");
-
-	if (file != NULL) {
-		fseek(file, 0L, SEEK_END);
-		file_size = ftell(file);
-		fseek(file, 0L, SEEK_SET);
-
-		mem = malloc(file_size + 0x200);
-
-		fread(mem + 0x200, file_size, 1, file);
-
-		memcpy(mem, &font, 80);
-	} else {
+	if (file == NULL) {
 		fprintf(stderr, "error: Could not open %s.\n", file_name);
 		exit(EXIT_FAILURE);
 	}
 
-	return file_size;
+	if (fseek(file, 0L, SEEK_END)) {
+		fprintf(stderr, "error: Could not read the file.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	file_size = ftell(file);
+	if (feof(file)) {
+		fprintf(stderr, "error: Could determine file size.\n");
+		exit(EXIT_FAILURE);
+	} else if (file_size > 0x1000 - 0x200) {
+		fprintf(stderr, "error: File size is too large.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (fseek(file, 0L, SEEK_SET)) {
+		fprintf(stderr, "error: Could not read the file.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	fread(mem + 0x200, file_size, 1, file);
+	if (ferror(file)) {
+		fprintf(stderr, "error: Could not read the file.\n");
+		exit(EXIT_FAILURE);
+	}
+
+	memcpy(mem, font, sizeof(font));
 }
 

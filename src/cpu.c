@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <time.h>
 
 #include "cpu.h"
@@ -33,8 +34,13 @@ void init_cpu(char *file_name)
 	cpu.pc = 0x200;
 	cpu.sp = 0;
 
-	uint16_t file_size = init_mem(mem, file_name);
-	printf("Loaded %d bytes.\n", file_size);
+	mem = malloc(4096);
+	if (mem == NULL) {
+		fprintf(stderr, "error: Not enough memory available");
+		exit(EXIT_FAILURE);
+	}
+
+	init_mem(mem, file_name);
 
 	init_input();
 	init_gfx("Chip8 Emulator");
@@ -44,7 +50,7 @@ void init_cpu(char *file_name)
 void quit()
 {
 	close_audio();
-	free_mem();
+	free(mem);
 }
 
 void cls_0()
