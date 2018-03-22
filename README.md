@@ -1,5 +1,4 @@
 # Chip8
-## Version 0.1.2
 
 ![](https://travis-ci.org/r10o/chip8.svg?branch=master)
 
