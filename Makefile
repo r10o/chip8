@@ -50,6 +50,6 @@ $(TARGET): $(OBJ)
 	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
 
 clean:
-	@rm -rvf build/* $(TARGET)
+	@rm -rvf $(OBJ) $(TARGET)
 
 .PHONY: all options clean 
