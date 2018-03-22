@@ -35,21 +35,15 @@ options:
 	@echo "$(TARGET) build options:"
 	@echo "CFLAGS	= $(CFLAGS)"
 	@echo "LDFLAGS	= $(LIBS)"
-	@echo "CC		= $(CC)"
+	@echo "CC	= $(CC)"
 
 %.o: %.c
-	@echo -e "\n>> compiling object files <<\n"
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
-	@mkdir -p bin
-	@echo -e "\n>> linking object files <<\n"
 	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
-	@echo -e "\n>> done compiling <<"
 
 clean:
-	@echo -e ">> cleaning <<\n"
 	@rm -rvf $(OBJ) $(TARGET)
-	@echo -e "\n>> done cleaning <<"
 
 .PHONY: all options clean 
