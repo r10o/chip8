@@ -1,33 +1,32 @@
-# Generic Makefile
-# See LICENSE file for copyright and license details.
-# See README for more information on the program
+TARGET	:= chip8
 
-include config.mk
+# Compiler
+CC		:= clang
+
+# Files
+SRC		:= $(wildcard src/*.c)
+OBJ		:= $(SRC:.c=.o)
+
+# Libraries
+LIBS	:= $(shell sdl-config --libs)
+LIBS	+= -lSDL_mixer
+
+# CFLAGS
+CFLAGS	+= -pipe
+CFLAGS	+= -std=c99
+CFLAGS	+= $(shell sdl-config --cflags)
 
 # CFLAG options
 # Compiler debugging enabled
+DEBUG	:= yes
+
 ifeq ($(DEBUG), yes)
+	CFLAGS	:= -Wall 
 	CFLAGS += -Wextra
 	CFLAGS += -g
-endif
-
-# Pedantic warnings
-ifeq ($(PEDANTIC), yes)
-	CFLAGS += -Werror
 	CFLAGS += -pedantic
-	CFLAGS += -pedantic-errors
-endif
-
-# Enable optimization
-ifeq ($(OPTIMIZE), yes)
-	CFLAGS += -O3
-endif
-
-# Sets if lib or bin
-ifeq ($(TYPE), lib)
-	DIR ?= $(LIB_DIR)
 else
-	DIR ?= $(BIN_DIR)
+	CFLAGS	+= -O2
 endif
 
 all: options $(TARGET)
@@ -35,8 +34,8 @@ all: options $(TARGET)
 options:
 	@echo "$(TARGET) build options:"
 	@echo "CFLAGS	= $(CFLAGS)"
-	@echo "LDFLAGS	= $(LDFLAGS)"
-	@echo "CC	= $(CC)"
+	@echo "LDFLAGS	= $(LIBS)"
+	@echo "CC		= $(CC)"
 
 %.o: %.c
 	@echo -e "\n>> compiling object files <<\n"
@@ -44,46 +43,13 @@ options:
 
 $(TARGET): $(OBJ)
 	@mkdir -p bin
-	@echo -e "\n>> linking object files into a shared library <<\n"
-	$(CC) $(LDFLAGS) $(OBJ) -o $(DIR)/$(OUTPUT)
+	@echo -e "\n>> linking object files <<\n"
+	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
 	@echo -e "\n>> done compiling <<"
 
 clean:
 	@echo -e ">> cleaning <<\n"
-	@rm -rvf $(DIR)/* $(OBJ) $(DIR)/*
+	@rm -rvf $(OBJ) $(TARGET)
 	@echo -e "\n>> done cleaning <<"
 
-dist:
-	@echo -e ">> making dist tarball <<\n"
-	@mkdir -vp $(TARGET)-$(VERSION)
-	@cp -avr LICENSE Makefile config.mk $(SRC_DIR) $(TARGET)-$(VERSION)
-	tar -cvf $(TARGET)-$(VERSION).tar $(TARGET)-$(VERSION)
-	gzip -v $(TARGET)-$(VERSION).tar
-	@rm -rvf $(TARGET)-$(VERSION)
-	@echo -e "\n>> $(TARGET)-$(VERSION).tar.gz created <<"
-
-install: all
-	@echo -e "\n>> installing $(TARGET)-$(VERSION) <<\n"
-	@mkdir -p $(DESTDIR)$(PREFIX)/$(DIR)
-	@mkdir -p $(DESTDIR)$(PREFIX)/$(INC_DIR)
-	@cp -vf $(DIR)/$(OUTPUT) $(DESTDIR)$(PREFIX)/$(DIR)
-ifeq ($(TYPE), lib)
-	@cp -vf $(SRC_DIR)/*.h $(DESTDIR)$(PREFIX)/$(INC_DIR)
-	@/usr/bin/bash -c "pushd $(DESTDIR)$(PREFIX)/$(DIR) > /dev/null;\
-	ln -svf $(OUTPUT) $(LIB_LN);\
-	ln -svf $(OUTPUT) $(LIB_LN_V);\
-	popd > /dev/null;"
-endif
-	@echo -e "\n>> done installing <<"
-
-uninstall:
-	@echo -e ">> uninstalling $(TARGET)-$(VERSION) <<\n"
-	@rm -vf $(DESTDIR)$(PREFIX)/$(INC_DIR)/$(TARGET).h
-	@rm -vf $(DESTDIR)$(PREFIX)/$(DIR)/$(OUTPUT) 
-ifeq ($(TYPE), lib)
-	@rm -vf $(DESTDIR)$(PREFIX)/$(DIR)/$(LIB_LN)
-	@rm -vf $(DESTDIR)$(PREFIX)/$(DIR)/$(LIB_LN_V)
-endif
-	@echo -e "\n>> done uninstalling <<"
-
-.PHONY: all options clean dist install uninstall
+.PHONY: all options clean 
