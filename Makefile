@@ -13,7 +13,7 @@ LIBS	+= -lSDL_mixer
 
 # CFLAGS
 CFLAGS	+= -pipe
-CFLAGS	+= -std=c99
+CFLAGS	+= -std=c11
 CFLAGS	+= $(shell sdl-config --cflags)
 
 # CFLAG options
