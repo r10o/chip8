@@ -5,6 +5,8 @@
 
 #include "sound.h"
 
+Mix_Chunk *beep;
+
 void init_audio()
 {
 	if (SDL_Init(SDL_INIT_AUDIO) == -1) {
