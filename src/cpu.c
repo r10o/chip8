@@ -7,47 +7,38 @@
 #include "sound.h"
 #include "debug.h"
 
+struct chip8_cpu {
+	/* Registers */
+	uint8_t v[16];
+	uint16_t i;
+	uint8_t delay_timer;
+	uint8_t sound_timer;
+	uint16_t pc;
+	uint8_t sp;
+	uint16_t stack[16];
+};
+
+struct chip8_cpu cpu;
+uint8_t *mem;
+
 static bool played = false;
 
 void init_cpu(char *file_name)
 {
-	for (int j = 0; j < 16; j++) {
-		cpu.v[j] = 0;
-		cpu.stack[j] = 0;
-	}
+	// Initialize the cpu registers
+	for (int j = 0; j < 16; j++) { cpu.v[j] = 0; cpu.stack[j] = 0; }
 	cpu.i = 0;
-	cpu.dt = 60;
-	cpu.st = 0;
+	cpu.delay_timer = 60;
+	cpu.sound_timer = 0;
 	cpu.pc = 0x200;
 	cpu.sp = 0;
-	uint16_t file_size = init_mem(file_name);
+
+	uint16_t file_size = init_mem(mem, file_name);
 	printf("Loaded %d bytes.\n", file_size);
+
 	init_input();
 	init_gfx("Chip8 Emulator");
 	init_audio();
-}
-
-void emulate_cycle()
-{
-	if (cpu.dt > 0) {
-		--cpu.dt;
-	}
-	if (cpu.st > 0) {
-		--cpu.st;
-		if (!played) {
-			play();
-			played = true;
-		}
-	}
-	else {
-		played = false;
-	}
-	uint16_t opcode = (mem[cpu.pc] << 8) | mem[cpu.pc + 1];
-	op_dis(cpu.pc, opcode);
-	execute_opcode(opcode);
-	draw();
-	get_input();
-	cpu.pc += 2;
 }
 
 void quit()
@@ -241,7 +232,7 @@ void sknp_e(uint8_t nib)
 
 void ld_f07(uint8_t nib)
 {
-	cpu.v[nib] = cpu.dt;
+	cpu.v[nib] = cpu.delay_timer;
 }
 
 void ld_f0a(uint8_t nib)
@@ -255,12 +246,12 @@ void ld_f0a(uint8_t nib)
 
 void ld_f15(uint8_t nib)
 {
-	cpu.dt = cpu.v[nib];
+	cpu.delay_timer = cpu.v[nib];
 }
 
 void ld_f18(uint8_t nib)
 {
-	cpu.st = cpu.v[nib];
+	cpu.sound_timer = cpu.v[nib];
 }
 
 void add_f(uint8_t nib)
@@ -354,3 +345,36 @@ void execute_opcode(uint16_t opcode)
 		default: fprintf(stderr, "error: UNKNOWN; %04x\n", opcode); break;
 	}
 }
+
+void emulate_cycle()
+{
+	if (cpu.delay_timer > 0) {
+		--cpu.delay_timer;
+	}
+
+	if (cpu.sound_timer > 0) {
+		--cpu.sound_timer;
+		if (!played) {
+			play();
+			played = true;
+		}
+	}
+	else {
+		played = false;
+	}
+
+	uint16_t opcode = (mem[cpu.pc] << 8) | mem[cpu.pc + 1];
+
+#ifdef DEBUG
+	op_dis(cpu.pc, opcode);
+#endif
+
+	execute_opcode(opcode);
+
+	draw();
+
+	get_input();
+
+	cpu.pc += 2;
+}
+
