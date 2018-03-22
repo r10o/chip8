@@ -21,12 +21,12 @@ CFLAGS	+= $(shell sdl-config --cflags)
 DEBUG	:= yes
 
 ifeq ($(DEBUG), yes)
-	CFLAGS	:= -Wall 
+	CFLAGS += -Wall 
 	CFLAGS += -Wextra
 	CFLAGS += -g
 	CFLAGS += -pedantic
 else
-	CFLAGS	+= -O2
+	CFLAGS += -O2
 endif
 
 all: options $(TARGET)
