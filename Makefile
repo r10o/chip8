@@ -28,6 +28,7 @@ ifeq ($(DEBUG), yes)
 	CFLAGS += -Wextra
 	CFLAGS += -g
 	CFLAGS += -pedantic
+	CFLAGS += -DDEBUG
 else
 	CFLAGS += -O2
 endif
