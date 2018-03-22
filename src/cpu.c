@@ -34,12 +34,12 @@ void init_cpu(char *file_name)
 	cpu.pc = 0x200;
 	cpu.sp = 0;
 
+	// Initialize memory
 	mem = malloc(4096);
 	if (mem == NULL) {
 		fprintf(stderr, "error: Not enough memory available");
 		exit(EXIT_FAILURE);
 	}
-
 	init_mem(mem, file_name);
 
 	init_input();
