@@ -8,13 +8,9 @@
 
 #define MSPF 1000 / 80
 
-extern void init_cpu(char *file_name);
-extern void emulate_cycle();
-extern void quit();
-
 int main(int argc, char *argv[]) {
 	if (argc > 1) {
-		init_cpu(argv[i]);
+		init_cpu(argv[1]);
 
 		uint32_t ticks = SDL_GetTicks();
 		int16_t delay_time = 0;
@@ -36,8 +32,7 @@ int main(int argc, char *argv[]) {
 	} else {
 		printf("Usage: chip8 -[hv] [file]\n");
 	}
-}
 
-return 0;
+	return 0;
 }
 
