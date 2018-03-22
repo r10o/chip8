@@ -4,8 +4,11 @@ TARGET	:= chip8
 CC		:= clang
 
 # Files
-SRC		:= $(wildcard src/*.c)
-OBJ		:= $(SRC:.c=.o)
+SRCDIR	:= src
+BLDDIR	:= build
+
+SRC		:= $(shell find $(SRCDIR) -type f -name *.c)
+OBJ		:= $(subst $(SRCDIR),$(BLDDIR),$(SRC:.c=.o))
 
 # Libraries
 LIBS	:= $(shell sdl-config --libs)
@@ -36,14 +39,17 @@ options:
 	@echo "CFLAGS	= $(CFLAGS)"
 	@echo "LDFLAGS	= $(LIBS)"
 	@echo "CC	= $(CC)"
+	@echo "SRC	= $(SRC)"
+	@echo "OBJ	= $(OBJ)"
 
-%.o: %.c
+$(BLDDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
+	@mkdir -p build
 	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
 
 clean:
-	@rm -rvf $(OBJ) $(TARGET)
+	@rm -rvf build/* $(TARGET)
 
 .PHONY: all options clean 
