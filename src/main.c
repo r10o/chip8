@@ -8,7 +8,8 @@
 
 #define MSPF 1000 / 80
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
 	if (argc > 1) {
 		init_cpu(argv[1]);
 

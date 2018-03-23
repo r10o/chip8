@@ -32,14 +32,14 @@ void draw()
 {
 	if (gfx.draw) {
 		SDL_Rect pixel;
-		pixel.w = 10;	
-		pixel.h = 10;	
+		pixel.w = 10;
+		pixel.h = 10;
 		uint32_t white = SDL_MapRGB(screen->format, 0xff, 0xff, 0xff);
 		uint32_t black = SDL_MapRGB(screen->format, 0x0, 0x0, 0x0);
 		for (int k = 0; k < WIDTH; k++) {
 			for (int j = 0; j < HEIGHT; j++) {
-				pixel.x = k * 10;	
-				pixel.y = j * 10;	
+				pixel.x = k * 10;
+				pixel.y = j * 10;
 				if (gfx.screen[k][j]) {
 					SDL_FillRect(screen, &pixel, white);
 				} else {
