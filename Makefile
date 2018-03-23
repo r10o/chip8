@@ -9,6 +9,7 @@ BLDDIR	:= build
 
 SRC		:= $(shell find $(SRCDIR) -type f -name *.c)
 OBJ		:= $(subst $(SRCDIR),$(BLDDIR),$(SRC:.c=.o))
+CMD		:= $(OBJ:.o=.o.json)
 
 # Libraries
 LIBS	:= $(shell sdl-config --libs)
@@ -42,15 +43,17 @@ options:
 	@echo "CC	= $(CC)"
 	@echo "SRC	= $(SRC)"
 	@echo "OBJ	= $(OBJ)"
+	@echo "CMD	= $(CMD)"
 
 $(BLDDIR)/%.o: $(SRCDIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) -MJ $@.json $(CFLAGS) -c $< -o $@
 
 $(TARGET): $(OBJ)
 	@mkdir -p build
 	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
+	@sed -e '1s/^/[\n/' -e '$$s/,$$/\n/' $(CMD) > compile_commands.json
 
 clean:
-	@rm -rvf $(OBJ) $(TARGET)
+	@rm -rvf $(OBJ) $(CMD) $(TARGET)
 
 .PHONY: all options clean 
