@@ -24,8 +24,7 @@ uint8_t *mem;
 
 static bool played = false;
 
-void init_cpu(char *file_name)
-{
+void init_cpu(char *file_name) {
 	// Initialize the cpu registers
 	for (int j = 0; j < 16; j++) { cpu.v[j] = 0; cpu.stack[j] = 0; }
 	cpu.i = 0;
@@ -47,14 +46,12 @@ void init_cpu(char *file_name)
 	init_audio();
 }
 
-void quit()
-{
+void quit() {
 	close_audio();
 	free(mem);
 }
 
-void cls_0()
-{
+void cls_0() {
 	for (int j = 0; j < HEIGHT; j++) {
 		for (int k = 0; k < WIDTH; k++) {
 			gfx.screen[k][j] = false;
@@ -63,77 +60,62 @@ void cls_0()
 	gfx.draw = true;
 }
 
-void ret_0()
-{
-	cpu.pc = cpu.stack[--cpu.sp];
+void ret_0() {
+	cpu.pc = cpu.stack[--cpu.sp] - 2;
 }
 
-void jp_1(uint16_t address)
-{
-	cpu.pc = address;
-	cpu.pc -= 2;
+void jp_1(uint16_t address) {
+	cpu.pc = address - 2;
 }
 
-void call_2(uint16_t address)
-{
+void call_2(uint16_t address) {
 	cpu.stack[cpu.sp++] = cpu.pc;
-	cpu.pc = address;
-	cpu.pc -= 2;
+	cpu.pc = address - 2;
 }
 
-void se_3(uint8_t nib, uint8_t byte)
-{
+void se_3(uint8_t nib, uint8_t byte) {
 	if (cpu.v[nib] == byte) {
 		cpu.pc += 2;
 	}
 }
 
-void sne_4(uint8_t nib, uint8_t byte)
-{
+void sne_4(uint8_t nib, uint8_t byte) {
 	if (cpu.v[nib] != byte) {
 		cpu.pc += 2;
 	}
 }
 
-void se_5(uint8_t nib1, uint8_t nib2)
-{
+void se_5(uint8_t nib1, uint8_t nib2) {
 	if (cpu.v[nib1] == cpu.v[nib2]) {
 		cpu.pc += 2;
 	}
 }
 
-void ld_6(uint8_t nib, uint8_t byte)
-{
+void ld_6(uint8_t nib, uint8_t byte) {
 	cpu.v[nib] = byte;
 }
 
-void add_7(uint8_t nib, uint8_t byte)
-{
+void add_7(uint8_t nib, uint8_t byte) {
 	cpu.v[nib] += byte;
 }
 
-void ld_8(uint8_t nib1, uint8_t nib2)
-{
+void ld_8(uint8_t nib1, uint8_t nib2) {
 	cpu.v[nib1] = cpu.v[nib2];
 }
 
-void or_8(uint8_t nib1, uint8_t nib2)
-{
+void or_8(uint8_t nib1, uint8_t nib2) {
 	cpu.v[nib1] |= cpu.v[nib2];
 }
 
-void and_8(uint8_t nib1, uint8_t nib2)
-{
+void and_8(uint8_t nib1, uint8_t nib2) {
 	cpu.v[nib1] &= cpu.v[nib2];
 }
 
-void xor_8(uint8_t nib1, uint8_t nib2)
-{
+void xor_8(uint8_t nib1, uint8_t nib2) {
 	cpu.v[nib1] ^= cpu.v[nib2];
 }
 
-void add_8(uint8_t nib1, uint8_t nib2)
-{
+void add_8(uint8_t nib1, uint8_t nib2) {
 	if ((cpu.v[nib1] + cpu.v[nib2]) > 0xff) {
 		cpu.v[0xf] = 1;
 	} else {
@@ -142,8 +124,7 @@ void add_8(uint8_t nib1, uint8_t nib2)
 	cpu.v[nib1] = (cpu.v[nib1] + cpu.v[nib2]) & 0xff;
 }
 
-void sub_8(uint8_t nib1, uint8_t nib2)
-{
+void sub_8(uint8_t nib1, uint8_t nib2) {
 	if (cpu.v[nib1] > cpu.v[nib2]) {
 		cpu.v[0xf] = 0;
 	} else {
@@ -152,8 +133,7 @@ void sub_8(uint8_t nib1, uint8_t nib2)
 	cpu.v[nib1] -= cpu.v[nib2];
 }
 
-void shr_8(uint8_t nib)
-{
+void shr_8(uint8_t nib) {
 	if ((cpu.v[nib] & 0x1) == 1) {
 		cpu.v[0xf] = 1;
 	} else {
@@ -162,8 +142,7 @@ void shr_8(uint8_t nib)
 	cpu.v[nib] >>= 1;
 }
 
-void subn_8(uint8_t nib1, uint8_t nib2)
-{
+void subn_8(uint8_t nib1, uint8_t nib2) {
 	if (cpu.v[nib2] > cpu.v[nib1]) {
 		cpu.v[0xf] = 1;
 	} else {
@@ -172,8 +151,7 @@ void subn_8(uint8_t nib1, uint8_t nib2)
 	cpu.v[nib1] = cpu.v[nib2] - cpu.v[nib1];
 }
 
-void shl_8(uint8_t nib)
-{
+void shl_8(uint8_t nib) {
 	if ((cpu.v[nib] & 0x80) == 1) {
 		cpu.v[0xf] = 1;
 	} else {
@@ -182,32 +160,27 @@ void shl_8(uint8_t nib)
 	cpu.v[nib] = (cpu.v[nib] << 1) & 0xff;
 }
 
-void sne_9(uint8_t nib1, uint8_t nib2)
-{
+void sne_9(uint8_t nib1, uint8_t nib2) {
 	if (cpu.v[nib1] != cpu.v[nib2]) {
 		cpu.pc += 2;
 	}
 }
 
-void ld_a(uint16_t address)
-{
+void ld_a(uint16_t address) {
 	cpu.i = address;
 }
 
-void jp_b(uint16_t address)
-{
+void jp_b(uint16_t address) {
 	cpu.pc = address + cpu.v[0x0];
 	cpu.pc -= 2;
 }
  
-void rnd_c(uint8_t nib, uint8_t byte)
-{
+void rnd_c(uint8_t nib, uint8_t byte) {
 	srand(time(NULL));
 	cpu.v[nib] = (rand() % 0x100) & byte;
 }
 
-void drw_d(uint8_t nib1, uint8_t nib2, uint8_t nib3)
-{
+void drw_d(uint8_t nib1, uint8_t nib2, uint8_t nib3) {
 	for (int j = 0; j < nib3; j++) {
 		uint16_t line = mem[cpu.i + j];
 		for (int k = 0; k < 8; k++) {
@@ -222,27 +195,23 @@ void drw_d(uint8_t nib1, uint8_t nib2, uint8_t nib3)
 	gfx.draw = true;
 }
 
-void skp_e(uint8_t nib)
-{
+void skp_e(uint8_t nib) {
 	if (keys[cpu.v[nib]]) {
 		cpu.pc += 2;
 	}
 }
 
-void sknp_e(uint8_t nib)
-{
+void sknp_e(uint8_t nib) {
 	if (!keys[cpu.v[nib]]) {
 		cpu.pc += 2;
 	}
 }
 
-void ld_f07(uint8_t nib)
-{
+void ld_f07(uint8_t nib) {
 	cpu.v[nib] = cpu.delay_timer;
 }
 
-void ld_f0a(uint8_t nib)
-{
+void ld_f0a(uint8_t nib) {
 	for (int j = 0; j < 0x10; j++) {
 		if (keys[j] == down) {
 			cpu.v[nib] = keys[j];
@@ -250,49 +219,41 @@ void ld_f0a(uint8_t nib)
 	}
 }
 
-void ld_f15(uint8_t nib)
-{
+void ld_f15(uint8_t nib) {
 	cpu.delay_timer = cpu.v[nib];
 }
 
-void ld_f18(uint8_t nib)
-{
+void ld_f18(uint8_t nib) {
 	cpu.sound_timer = cpu.v[nib];
 }
 
-void add_f(uint8_t nib)
-{
+void add_f(uint8_t nib) {
 	cpu.i += cpu.v[nib];
 }
 
-void ld_f29(uint8_t nib)
-{
+void ld_f29(uint8_t nib) {
 	cpu.i = cpu.v[nib] * 5;
 }
 
-void ld_f33(uint8_t nib)
-{ 
+void ld_f33(uint8_t nib) { 
 	mem[cpu.i] = cpu.v[nib] / 100;
 	mem[cpu.i + 1] = (cpu.v[nib] % 100) / 10;
 	mem[cpu.i + 2] = cpu.v[nib] % 10;
 }
 
-void ld_f55(uint8_t nib)
-{
+void ld_f55(uint8_t nib) {
 	for (int j = 0; j <= nib; j++) {
 		mem[cpu.i + j] = cpu.v[j];
 	}
 }
 
-void ld_f65(uint8_t nib)
-{
+void ld_f65(uint8_t nib) {
 	for (int j = 0; j <= nib; j++) {
 		cpu.v[j] = mem[cpu.i + j];
 	}
 }
 
-void execute_opcode(uint16_t opcode)
-{
+void execute_opcode(uint16_t opcode) {
 	switch (opcode >> 12) {
 		case 0x0:
 			switch (opcode & 0xff) {
@@ -352,8 +313,7 @@ void execute_opcode(uint16_t opcode)
 	}
 }
 
-void emulate_cycle()
-{
+void emulate_cycle() {
 	if (cpu.delay_timer > 0) {
 		--cpu.delay_timer;
 	}
