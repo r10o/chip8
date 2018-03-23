@@ -1,5 +1,5 @@
-#ifndef DIS_H
-#define DIS_H
+#ifndef CHIP8_DEBUG_H
+#define CHIP8_DEBUG_H
 
 #include <stdio.h>
 #include <stdint.h>

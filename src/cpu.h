@@ -1,5 +1,5 @@
-#ifndef CPU_H
-#define CPU_H
+#ifndef CHIP8_CPU_H
+#define CHIP8_CPU_H
 
 #include <stdint.h>
 #include <stdio.h>

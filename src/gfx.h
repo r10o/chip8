@@ -1,8 +1,10 @@
-#ifndef GFX_H
-#define GFX_H
+#ifndef CHIP8_GFX_H
+#define CHIP8_GFX_H
+
 #include <stdint.h>
 #include <stdbool.h>
-#include "SDL/SDL.h"
+
+#include <SDL.h>
 
 #define WIDTH 64
 #define HEIGHT 32
@@ -14,9 +16,8 @@ struct chip8_gfx {
 
 struct chip8_gfx gfx;
 
-SDL_Surface *screen;
-
 void init_gfx(char *title);
 void draw();
+
 #endif
 

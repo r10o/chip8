@@ -1,4 +1,8 @@
+#include <SDL.h>
+
 #include "gfx.h"
+
+SDL_Surface *screen;
 
 void init_gfx(char *title)
 {

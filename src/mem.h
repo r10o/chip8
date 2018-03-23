@@ -1,5 +1,5 @@
-#ifndef MEM_H
-#define MEM_H
+#ifndef CHIP8_MEM_H
+#define CHIP8_MEM_H
 
 #include <stdint.h>
 

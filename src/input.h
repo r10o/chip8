@@ -1,5 +1,5 @@
-#ifndef INPUT_H
-#define INPUT_H
+#ifndef CHIP8_INPUT_H
+#define CHIP8_INPUT_H
 
 enum key_state {
 	up,
@@ -7,7 +7,7 @@ enum key_state {
 };
 
 #include <stdlib.h>
-#include "SDL/SDL.h"
+#include <SDL.h>
 
 enum key_state keys[0x10];
 
