@@ -30,6 +30,8 @@ ifeq ($(DEBUG), yes)
 	CFLAGS += -g
 	CFLAGS += -pedantic
 	CFLAGS += -DDEBUG
+
+	COMP := yes
 else
 	CFLAGS += -O2
 endif
@@ -46,12 +48,18 @@ options:
 	@echo "CMD	= $(CMD)"
 
 $(BLDDIR)/%.o: $(SRCDIR)/%.c
+ifeq ($(COMP), yes)
 	$(CC) -MJ $@.json $(CFLAGS) -c $< -o $@
+else
+	$(CC) $(CFLAGS) -c $< -o $@
+endif
 
 $(TARGET): $(OBJ)
 	@mkdir -p build
 	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
+ifeq ($(COMP), yes)
 	@sed -e '1s/^/[\n/' -e '$$s/,$$/\n/' $(CMD) > compile_commands.json
+endif
 
 clean:
 	@rm -rvf $(OBJ) $(CMD) $(TARGET)
