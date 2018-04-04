@@ -6,7 +6,7 @@
 
 #include "cpu.h"
 
-#define MSPF 1000 / 80
+#define MILISECONDS_PER_FRAME 1000 / 80
 
 int main(int argc, char *argv[])
 {
@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 		while (running) {
 			emulate_cycle();
 
-			ticks += MSPF;
+			ticks += MILISECONDS_PER_FRAME;
 			delay_time = ticks - SDL_GetTicks();
 
 			if (delay_time >= 0)
