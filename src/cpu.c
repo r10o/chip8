@@ -2,11 +2,11 @@
 #include <time.h>
 
 #include "cpu.h"
-#include "gfx.h"
-#include "mem.h"
-#include "input.h"
-#include "sound.h"
 #include "debug.h"
+#include "gfx.h"
+#include "input.h"
+#include "mem.h"
+#include "sound.h"
 
 struct chip8_cpu {
 	/* Registers */

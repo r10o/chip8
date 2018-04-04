@@ -7,7 +7,8 @@ enum key_state {
 };
 
 #include <stdlib.h>
-#include <SDL.h>
+
+#include <SDL/SDL.h>
 
 enum key_state keys[0x10];
 

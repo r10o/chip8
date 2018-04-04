@@ -1,4 +1,5 @@
-#include <SDL.h>
+#include <SDL/SDL.h>
+
 #include "input.h"
 
 SDL_Event event;

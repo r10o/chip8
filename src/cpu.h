@@ -1,10 +1,10 @@
 #ifndef CHIP8_CPU_H
 #define CHIP8_CPU_H
 
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
 /* Initializes the values of the registers and the timers */
 void init_cpu();
