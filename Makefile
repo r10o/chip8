@@ -36,7 +36,10 @@ else
 	CFLAGS += -O2
 endif
 
-all: options $(TARGET)
+all: setup options $(TARGET)
+
+setup:
+	@mkdir -p build
 
 options:
 	@echo "$(TARGET) build options:"
@@ -55,7 +58,6 @@ else
 endif
 
 $(TARGET): $(OBJ)
-	@mkdir -p build
 	$(CC) $(LIBS) $(OBJ) -o $(BLDDIR)/$(TARGET)
 ifeq ($(COMP), yes)
 	@sed -e '1s/^/[\n/' -e '$$s/,$$/\n/' $(CMD) > $(BLDDIR)/compile_commands.json
@@ -64,4 +66,4 @@ endif
 clean:
 	@rm -rvf $(OBJ) $(CMD) $(TARGET)
 
-.PHONY: all options clean 
+.PHONY: all setup options clean 
