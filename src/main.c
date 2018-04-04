@@ -6,7 +6,7 @@
 
 #include "cpu.h"
 
-#define MILISECONDS_PER_FRAME 1000 / 80
+#define MILISECONDS_PER_FRAME (1000 / 80)
 
 int main(int argc, char *argv[])
 {
@@ -24,14 +24,15 @@ int main(int argc, char *argv[])
 			ticks += MILISECONDS_PER_FRAME;
 			delay_time = ticks - SDL_GetTicks();
 
-			if (delay_time >= 0)
+			if (delay_time >= 0) {
 				SDL_Delay(delay_time);
+			}
 		}
 
 		quit();
 		SDL_Quit();
 	} else {
-		printf("Usage: chip8 -[hv] [file]\n");
+		printf("Usage: chip8 [file]\n");
 	}
 
 	return 0;
