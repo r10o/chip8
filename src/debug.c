@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "debug.h"
 
 void op_dis(uint16_t pc, uint16_t opcode)
