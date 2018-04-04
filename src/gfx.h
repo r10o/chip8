@@ -1,10 +1,10 @@
 #ifndef CHIP8_GFX_H
 #define CHIP8_GFX_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 #define WIDTH 64
 #define HEIGHT 32
