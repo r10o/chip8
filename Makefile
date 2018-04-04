@@ -56,9 +56,9 @@ endif
 
 $(TARGET): $(OBJ)
 	@mkdir -p build
-	$(CC) $(LIBS) $(OBJ) -o $(TARGET)
+	$(CC) $(LIBS) $(OBJ) -o $(BLDDIR)/$(TARGET)
 ifeq ($(COMP), yes)
-	@sed -e '1s/^/[\n/' -e '$$s/,$$/\n/' $(CMD) > compile_commands.json
+	@sed -e '1s/^/[\n/' -e '$$s/,$$/\n/' $(CMD) > $(BLDDIR)/compile_commands.json
 endif
 
 clean:
