@@ -177,7 +177,7 @@ void shl_8(uint8_t nib)
 	} else {
 		cpu.v[0xf] = 0;
 	}
-	cpu.v[nib] = (cpu.v[nib] << 1) & 0xff;
+	cpu.v[nib] = (cpu.v[nib] << 1) & 0xffff;
 }
 
 void sne_9(uint8_t nib1, uint8_t nib2)
