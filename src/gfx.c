@@ -4,8 +4,7 @@
 
 SDL_Surface *screen;
 
-void init_gfx(char *title)
-{
+void init_gfx(char *title) {
 	gfx.draw = false;
 	for (int k = 0; k < WIDTH; k++) {
 		for (int j = 0; j < HEIGHT; j++) {
@@ -28,8 +27,7 @@ void init_gfx(char *title)
 	SDL_WM_SetCaption(title, NULL);
 }
 
-void draw()
-{
+void draw() {
 	if (gfx.draw) {
 		SDL_Rect pixel;
 		pixel.w = 10;

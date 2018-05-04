@@ -25,7 +25,7 @@ CFLAGS	+= $(shell sdl-config --cflags)
 DEBUG	:= yes
 
 ifeq ($(DEBUG), yes)
-	CFLAGS += -Wall 
+	CFLAGS += -Wall
 	CFLAGS += -Wextra
 	CFLAGS += -g
 	CFLAGS += -pedantic
